@@ -1,8 +1,11 @@
 # Aku Desil 10 ☝️🤓
 
+[![Live Demo](https://img.shields.io/badge/Demo-Live%20Website-orange?style=flat&logo=googlechrome&logoColor=white)](https://helggaa.github.io/Aku-Desil-10/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-amber.svg)](LICENSE)
 [![Vanilla JS](https://img.shields.io/badge/Stack-Vanilla%20JS%20%7C%20HTML5%20%7C%20CSS-blue.svg)](index.html)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25%20In--Browser%20(Zero%20Telemetry)-emerald.svg)](SECURITY.md)
+
+🌐 **Akses Langsung Aplikasi (Live Demo):** [https://helggaa.github.io/Aku-Desil-10/](https://helggaa.github.io/Aku-Desil-10/)
 
 > **📌 Penafian Resmi (Disclaimer):**  
 > Aplikasi ini adalah alat **simulasi & estimasi statistik mandiri** untuk tujuan edukasi dan literasi data publik. Aplikasi ini **tidak berafiliasi dengan lembaga pemerintah mana pun** (Kemensos, BPS, DTSEN, dll.), tidak menggunakan data identitas individu resmi pemerintah, dan tidak dapat digunakan sebagai dasar penetapan maupun pencabutan program bantuan sosial atau subsidi resmi.
@@ -101,11 +104,13 @@ $$\begin{aligned}
 ### A. Buka Langsung (Lokal)
 Cukup buka file `index.html` di peramban web modern apa pun (*Chrome, Firefox, Safari, Edge*). Tidak memerlukan instalasi, dependensi `npm`, maupun server backend.
 
-### B. Deploy ke GitHub Pages (1-Klik)
-1. Push repositori ini ke GitHub.
-2. Buka menu **Settings** > **Pages** di repositori GitHub.
-3. Pada bagian **Build and deployment**, pilih Source: **Deploy from a branch** > Branch: `main` / `root` > **Save**.
-4. Website langsung online dan dapat diakses publik secara gratis dan aman!
+### B. Akses GitHub Pages
+Website aktif dan dapat langsung dibuka di:  
+👉 **[https://helggaa.github.io/Aku-Desil-10/](https://helggaa.github.io/Aku-Desil-10/)**
+
+Jika melakukan *fork* atau *re-deploy*:
+1. Buka menu **Settings** > **Pages** di repositori GitHub.
+2. Pada bagian **Build and deployment**, pilih Source: **Deploy from a branch** > Branch: `main` > Folder: `/ (root)` > **Save**.
 
 ---
 
