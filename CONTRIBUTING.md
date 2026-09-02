@@ -23,4 +23,4 @@ Proyek ini dibangun dengan komitmen teguh terhadap:
 ---
 
 ## 📌 Melaporkan Isu atau Diskusi Formula
-Jika kamu menemukan anomali perhitungan atau ingin mendiskusikan kalibrasi $\mu$ dan $\sigma$ terbaru BPS, silakan buka [GitHub Issues](https://github.com/helga-id/aku-desil-10/issues).
+Jika kamu menemukan anomali perhitungan atau ingin mendiskusikan kalibrasi $\mu$ dan $\sigma$ terbaru BPS, silakan buka [GitHub Issues](https://github.com/helggaa/Aku-Desil-10/issues).
