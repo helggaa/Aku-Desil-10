@@ -858,6 +858,58 @@ body {
   color: var(--text-tertiary);
 }
 
+/* Multidimensional Indicators Card (MPI) */
+.mpi-evaluation-card {
+  background: var(--panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 1rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.mpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.65rem;
+}
+
+@media (max-width: 540px) {
+  .mpi-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mpi-cell {
+  background: var(--panel-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 0.65rem 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.mpi-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
+}
+
+.mpi-value {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text-white);
+}
+
+.mpi-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
 /* Asset Breakdown */
 .asset-accordion-box {
   background: var(--panel-elevated);

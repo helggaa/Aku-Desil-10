@@ -81,21 +81,27 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 
   // =========================================================================
-  // 3. Mathematical & Economic Engine (BPS Susenas Standard)
+  // 3. Mathematical & Economic Engine (World Bank & Multidimensional MPI)
   // =========================================================================
   const EconomicEngine = (() => {
-    const BPS_MU = 13.8265;
-    const BPS_SIGMA = 0.328;
+    // World Bank 2021 PPP Conversion Factor for Indonesia (1 USD PPP ≈ IDR 5,420)
+    const PPP_FACTOR = 5420;
+    const DAYS_PER_MONTH = 30.416;
 
-    /**
-     * Standard Normal Cumulative Distribution Function (Abramowitz & Stegun 7.1.26)
-     */
-    function normalCDF(z) {
-      const t = 1 / (1 + 0.3275911 * Math.abs(z));
-      const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t
-                 - 0.284496736) * t + 0.254829592) * t * Math.exp(-z * z);
-      return 0.5 * (1 + Math.sign(z) * y);
-    }
+    // World Bank Aspiring Indonesia Thresholds (Multiples of National Baseline Rp 641,443)
+    // Ref: World Bank "Aspiring Indonesia: Expanding the Middle Class" & PIP Datasets
+    const WB_THRESHOLDS = [
+      { desil: 1, maxIDR: 641443, maxPPP: 3.89, label: 'Poor (Di bawah Garis Kemiskinan)', minPercentile: 0.1, maxPercentile: 8.0 },
+      { desil: 2, maxIDR: 962165, maxPPP: 5.84, label: 'Vulnerable (Rentan Miskin - 1.5x Garis Kemiskinan)', minPercentile: 8.0, maxPercentile: 23.6 },
+      { desil: 3, maxIDR: 1350000, maxPPP: 8.19, label: 'Aspiring Middle Class (Garis UMIC $6.85 Bank Dunia)', minPercentile: 23.6, maxPercentile: 38.0 },
+      { desil: 4, maxIDR: 1750000, maxPPP: 10.62, label: 'Aspiring Middle Class (Menuju Kelas Menengah)', minPercentile: 38.0, maxPercentile: 53.0 },
+      { desil: 5, maxIDR: 2245051, maxPPP: 13.62, label: 'Aspiring Middle Class Atas (3.5x Garis Kemiskinan)', minPercentile: 53.0, maxPercentile: 68.6 },
+      { desil: 6, maxIDR: 3500000, maxPPP: 21.23, label: 'Middle Class Pemula (Ambang Kelas Menengah Aman)', minPercentile: 68.6, maxPercentile: 78.0 },
+      { desil: 7, maxIDR: 5200000, maxPPP: 31.54, label: 'Middle Class Inti (Kelas Menengah Mapan)', minPercentile: 78.0, maxPercentile: 84.0 },
+      { desil: 8, maxIDR: 7500000, maxPPP: 45.50, label: 'Upper-Middle Class (Menengah Atas)', minPercentile: 84.0, maxPercentile: 88.0 },
+      { desil: 9, maxIDR: 10904531, maxPPP: 66.15, label: 'Near Upper Class (Puncak Kelas Menengah / 17x Baseline)', minPercentile: 88.0, maxPercentile: 90.0 },
+      { desil: 10, maxIDR: Infinity, maxPPP: Infinity, label: 'Upper Class Sejati Bank Dunia (> 17x Baseline)', minPercentile: 90.0, maxPercentile: 99.9 }
+    ];
 
     function computePerCapitaMonthly({ monthlyWages = 0, annualBusinessProfit = 0, householdSize = 1 }) {
       const size = Math.max(1, householdSize);
@@ -103,29 +109,143 @@ document.addEventListener('DOMContentLoaded', () => {
       return Math.max(1, monthlyTotal / size);
     }
 
-    function computeDesil(perCapitaMonthly) {
-      const safePerCapita = Math.max(1, perCapitaMonthly || 1);
-      const z = (Math.log(safePerCapita) - BPS_MU) / BPS_SIGMA;
-      const percentile = normalCDF(z);
-      const desil = Math.min(10, Math.max(1, Math.floor(percentile * 10) + 1));
-      const percentileExact = Math.min(99.9, Math.max(0.1, percentile * 100));
+    function computeDailyUSDPPP(perCapitaMonthly) {
+      return (perCapitaMonthly / DAYS_PER_MONTH) / PPP_FACTOR;
+    }
+
+    function evaluateMPI({
+      educationLevel = 'SMA',
+      chronicDisease = 'no',
+      disability = 'no',
+      houseOwnership = 'Milik Sendiri',
+      houseSizeM2 = 36,
+      householdSize = 1,
+      floorType = 'Keramik/Granit',
+      wallType = 'Tembok Bata',
+      roofType = 'Genteng/Seng Baik',
+      waterSource = 'PDAM/Sumur Bor',
+      sanitationFacility = 'Septic Tank Sendiri',
+      electricityPower = '1300'
+    }) {
+      let eduMod = 0;
+      let eduTitle = 'Pendidikan Menengah';
+      let eduSub = 'SMA / SMK Sederajat';
+      if (educationLevel === 'SD') { eduMod = -0.08; eduTitle = 'Pendidikan Dasar'; eduSub = 'Tidak Sekolah / SD'; }
+      else if (educationLevel === 'SMP') { eduMod = -0.04; eduTitle = 'Pendidikan Menengah Pertama'; eduSub = 'SMP / MTs Sederajat'; }
+      else if (educationLevel === 'Diploma') { eduMod = 0.06; eduTitle = 'Pendidikan Tinggi Vokasi'; eduSub = 'Diploma (D1–D4)'; }
+      else if (educationLevel === 'Sarjana') { eduMod = 0.12; eduTitle = 'Modal Manusia Tinggi'; eduSub = 'Sarjana (S1/S2/S3)'; }
+
+      // Health & Disability Burden
+      let healthBurden = 0;
+      let healthTitle = 'Beban Normal';
+      let healthSub = 'Keluarga sehat & mandiri';
+      if (chronicDisease === 'yes' && disability === 'yes') {
+        healthBurden = -0.30;
+        healthTitle = 'Beban Kerentanan Berat';
+        healthSub = 'Penyakit kronis & disabilitas berat';
+      } else if (chronicDisease === 'yes') {
+        healthBurden = -0.18;
+        healthTitle = 'Beban Biaya Kronis';
+        healthSub = 'Riwayat penyakit kronis/menahun';
+      } else if (disability === 'yes') {
+        healthBurden = -0.15;
+        healthTitle = 'Beban Pendampingan';
+        healthSub = 'Anggota disabilitas berat';
+      }
+
+      // Housing Quality
+      let housingMod = 0;
+      let isSubstandardHousing = floorType === 'Tanah/Bambu' || wallType === 'Bambu/Kayu Lapuk' || roofType === 'Rumbia/Seng Rusak';
+      const spacePerCapita = Math.max(1, houseSizeM2 / Math.max(1, householdSize));
+
+      if (isSubstandardHousing) housingMod -= 0.15;
+      if (spacePerCapita < 8) housingMod -= 0.05; // Overcrowded housing penalty
+      if (floorType === 'Keramik/Granit' && wallType === 'Tembok Bata' && roofType !== 'Rumbia/Seng Rusak') housingMod += 0.05;
+
+      let housingTitle = isSubstandardHousing ? 'Rumah Tidak Layak Huni' : 'Rumah Layak Huni';
+      let housingSub = `${floorType.split('/')[0]}, ${wallType.split('/')[0]} (${spacePerCapita.toFixed(1)} m²/org)`;
+
+      // WASH (Water, Sanitation & Hygiene)
+      let washMod = 0;
+      let isPoorWASH = waterSource === 'Sungai/Air Hujan' || sanitationFacility === 'Tanpa Jamban';
+      if (waterSource === 'Kemasan/Bermerk') washMod += 0.04;
+      if (waterSource === 'Sungai/Air Hujan') washMod -= 0.12;
+      if (sanitationFacility === 'Septic Tank Sendiri') washMod += 0.04;
+      else if (sanitationFacility === 'Tanpa Jamban') washMod -= 0.15;
+
+      let washTitle = isPoorWASH ? 'Sanitasi & Air Buruk' : (sanitationFacility === 'Septic Tank Sendiri' ? 'Sanitasi Aman & Layak' : 'Sanitasi Bersama/Sederhana');
+      let washSub = `${sanitationFacility.split('(')[0].trim()} + ${waterSource.split('/')[0]}`;
+
+      // Electricity
+      let electricMod = 0;
+      if (electricityPower === '450') electricMod = -0.08;
+      else if (electricityPower === '900') electricMod = -0.02;
+      else if (electricityPower === '2200') electricMod = 0.05;
+      else if (electricityPower === '3500+') electricMod = 0.10;
+
+      const totalMultidimensionalMod = eduMod + healthBurden + housingMod + washMod + electricMod;
+
+      return {
+        totalMod: totalMultidimensionalMod,
+        housing: { title: housingTitle, sub: housingSub },
+        wash: { title: washTitle, sub: washSub },
+        education: { title: eduTitle, sub: eduSub },
+        health: { title: healthTitle, sub: healthSub }
+      };
+    }
+
+    function getWorldBankClass(perCapitaMonthly) {
+      if (perCapitaMonthly < 641443) return { name: 'Poor (Miskin Ekstrem)', badge: 'Garis BPS / LMIC' };
+      if (perCapitaMonthly < 962165) return { name: 'Vulnerable (Rentan Miskin)', badge: '1.0x – 1.5x Baseline' };
+      if (perCapitaMonthly < 2245051) return { name: 'Aspiring Middle Class (Menuju Menengah)', badge: '1.5x – 3.5x Baseline' };
+      if (perCapitaMonthly < 10904531) return { name: 'Middle Class (Kelas Menengah Aman)', badge: '3.5x – 17x Baseline' };
+      return { name: 'Upper Class (Desil 10 Sejati)', badge: '> 17x Baseline' };
+    }
+
+    function computeDesil(perCapitaMonthly, mpiMod = 0) {
+      // Adjusted Capacity incorporating Multidimensional Poverty / Welfare modifiers
+      const effectivePerCapita = Math.max(1, perCapitaMonthly * (1 + mpiMod));
+      const dailyPPP = computeDailyUSDPPP(effectivePerCapita);
+      const wbClass = getWorldBankClass(effectivePerCapita);
+
+      let matchedIndex = WB_THRESHOLDS.findIndex(t => effectivePerCapita <= t.maxIDR);
+      if (matchedIndex === -1) matchedIndex = WB_THRESHOLDS.length - 1;
+
+      const bracket = WB_THRESHOLDS[matchedIndex];
+      const prevMax = matchedIndex === 0 ? 0 : WB_THRESHOLDS[matchedIndex - 1].maxIDR;
+      
+      // Interpolate exact percentile within bracket
+      let fraction = 0;
+      if (matchedIndex === WB_THRESHOLDS.length - 1) {
+        // Logarithmic scale for top decile
+        fraction = Math.min(1, Math.log(effectivePerCapita / 10904531) / Math.log(50000000 / 10904531));
+      } else {
+        fraction = Math.min(1, Math.max(0, (effectivePerCapita - prevMax) / (bracket.maxIDR - prevMax)));
+      }
+
+      const percentileExact = Math.min(99.9, Math.max(0.1, bracket.minPercentile + (fraction * (bracket.maxPercentile - bracket.minPercentile))));
+      const rawPercentile = percentileExact / 100;
+      const desil = bracket.desil;
 
       return {
         desil,
         decile: desil,
         percentileExact,
-        rawPercentile: percentile
+        rawPercentile,
+        dailyPPP,
+        wbClass,
+        effectivePerCapita
       };
     }
 
     function computeAssetIndex({
       houseSizeM2 = 0,
       landSizeM2 = 0,
+      livestockValue = 0,
       carCount = 0,
       carAvgValue = 0,
       motorCount = 0,
       motorAvgValue = 0,
-      otherVehicleValue = 0,
       phoneCount = 0,
       phoneAvgValue = 0,
       laptopCount = 0,
@@ -135,9 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }) {
       const houseVal = houseSizeM2 * 500_000;
       const landVal = landSizeM2 * 300_000;
+      const livestockVal = livestockValue * 0.5;
       const carVal = carCount * carAvgValue * 0.1;
       const motorVal = motorCount * motorAvgValue * 0.1;
-      const otherVehVal = otherVehicleValue * 0.1;
       const phoneVal = phoneCount * phoneAvgValue * 0.2;
       const laptopVal = laptopCount * laptopAvgValue * 0.2;
       const electronicsVal = otherElectronicsValue * 0.2;
@@ -146,19 +266,20 @@ document.addEventListener('DOMContentLoaded', () => {
       return {
         houseVal,
         landVal,
+        livestockVal,
         carVal,
         motorVal,
-        otherVehVal,
         phoneVal,
         laptopVal,
         electronicsVal,
         goldVal,
-        total: houseVal + landVal + carVal + motorVal + otherVehVal + phoneVal + laptopVal + electronicsVal + goldVal
+        total: houseVal + landVal + livestockVal + carVal + motorVal + phoneVal + laptopVal + electronicsVal + goldVal
       };
     }
 
     return {
       computePerCapitaMonthly,
+      evaluateMPI,
       computeDesil,
       computeAssetIndex
     };
@@ -178,12 +299,11 @@ document.addEventListener('DOMContentLoaded', () => {
       const previewConfigs = [
         { inputId: 'monthlyWages', previewId: 'preview-monthlyWages', suffix: '' },
         { inputId: 'annualBusinessProfit', previewId: 'preview-annualBusinessProfit', suffix: ' / tahun' },
-        { inputId: 'monthlyExpenses', previewId: 'preview-monthlyExpenses', suffix: '' },
         { inputId: 'carAvgValue', previewId: 'preview-carAvgValue', suffix: '' },
         { inputId: 'motorAvgValue', previewId: 'preview-motorAvgValue', suffix: '' },
-        { inputId: 'otherVehicleValue', previewId: 'preview-otherVehicleValue', suffix: '' },
         { inputId: 'phoneAvgValue', previewId: 'preview-phoneAvgValue', suffix: '' },
         { inputId: 'laptopAvgValue', previewId: 'preview-laptopAvgValue', suffix: '' },
+        { inputId: 'livestockValue', previewId: 'preview-livestockValue', suffix: '' },
         { inputId: 'otherElectronicsValue', previewId: 'preview-otherElectronicsValue', suffix: '' },
         { inputId: 'goldSavingsValue', previewId: 'preview-goldSavingsValue', suffix: '' }
       ];
@@ -219,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-      // Quick Salary Chips
+      // Quick Chips
       document.querySelectorAll('.preset-chip').forEach(chip => {
         chip.addEventListener('click', () => {
           const targetId = chip.getAttribute('data-input');
@@ -273,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       });
 
-      // Disable mouse wheel value changes on all number inputs (prevents accidental increment/decrement during page scrolling)
+      // Disable mouse wheel value changes on all number inputs
       document.querySelectorAll('input[type="number"]').forEach(input => {
         input.addEventListener('wheel', (e) => {
           e.preventDefault();
@@ -299,16 +419,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function getFormData() {
       return {
         householdSize: parseInt(document.getElementById('householdSize')?.value, 10) || 1,
+        educationLevel: document.getElementById('educationLevel')?.value || 'SMA',
+        chronicDisease: document.querySelector('input[name="chronicDisease"]:checked')?.value || 'no',
+        disability: document.querySelector('input[name="disability"]:checked')?.value || 'no',
         monthlyWages: parseFloat(document.getElementById('monthlyWages')?.value) || 0,
         hasBusiness: document.querySelector('input[name="hasBusiness"]:checked')?.value === 'yes',
         annualBusinessProfit: parseFloat(document.getElementById('annualBusinessProfit')?.value) || 0,
+        houseOwnership: document.getElementById('houseOwnership')?.value || 'Milik Sendiri',
         houseSizeM2: parseFloat(document.getElementById('houseSizeM2')?.value) || 0,
+        floorType: document.getElementById('floorType')?.value || 'Keramik/Granit',
+        wallType: document.getElementById('wallType')?.value || 'Tembok Bata',
+        roofType: document.getElementById('roofType')?.value || 'Genteng/Seng Baik',
+        waterSource: document.getElementById('waterSource')?.value || 'PDAM/Sumur Bor',
+        sanitationFacility: document.getElementById('sanitationFacility')?.value || 'Septic Tank Sendiri',
+        electricityPower: document.getElementById('electricityPower')?.value || '1300',
         landSizeM2: parseFloat(document.getElementById('landSizeM2')?.value) || 0,
+        livestockValue: parseFloat(document.getElementById('livestockValue')?.value) || 0,
         carCount: parseInt(document.getElementById('carCount')?.value, 10) || 0,
         carAvgValue: parseFloat(document.getElementById('carAvgValue')?.value) || 0,
         motorCount: parseInt(document.getElementById('motorCount')?.value, 10) || 0,
         motorAvgValue: parseFloat(document.getElementById('motorAvgValue')?.value) || 0,
-        otherVehicleValue: parseFloat(document.getElementById('otherVehicleValue')?.value) || 0,
         phoneCount: parseInt(document.getElementById('phoneCount')?.value, 10) || 0,
         phoneAvgValue: parseFloat(document.getElementById('phoneAvgValue')?.value) || 0,
         laptopCount: parseInt(document.getElementById('laptopCount')?.value, 10) || 0,
@@ -322,37 +452,47 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 
   // =========================================================================
-  // 5. Results Renderer & Dashboard
+  // 5. Results Renderer & Dashboard (World Bank Standards)
   // =========================================================================
   const ResultsRenderer = (() => {
     let lastCopyPayload = '';
 
     const DECILE_VERDICTS = {
-      1: 'Estimasi berada di kelompok 10% terbawah (< Rp 664.000 / kapita / bulan) di bawah ambang rata-rata garis kemiskinan BPS.',
-      2: 'Estimasi berada di rentang pengeluaran Rp 664.000 – Rp 767.000 per orang per bulan (20% terbawah nasional).',
-      3: 'Estimasi berada di rentang pengeluaran Rp 767.000 – Rp 851.000 per orang per bulan (30% terbawah nasional).',
-      4: 'Estimasi berada di rentang pengeluaran Rp 851.000 – Rp 931.000 per orang per bulan (kelompok menengah-bawah).',
-      5: 'Estimasi berada tepat di titik tengah (median 50%) pengeluaran nasional (Rp 931.000 – Rp 1.011.000 per orang per bulan).',
-      6: 'Estimasi berada di rentang pengeluaran Rp 1.011.000 – Rp 1.099.000 per orang per bulan (kelompok menengah).',
-      7: 'Estimasi berada di rentang pengeluaran Rp 1.099.000 – Rp 1.201.000 per orang per bulan (kelompok menengah atas).',
-      8: 'Estimasi berada di rentang pengeluaran Rp 1.201.000 – Rp 1.333.000 per orang per bulan (20% teratas nasional).',
-      9: 'Estimasi berada di rentang pengeluaran Rp 1.333.000 – Rp 1.539.000 per orang per bulan (10%–20% teratas nasional).',
-      10: '☝️🤓 Estimasi Desil 10! Berada di perkiraan 10% teratas pengeluaran per kapita nasional (> Rp 1.539.000 / orang / bulan) berdasarkan kurva Susenas.'
+      1: 'Estimasi berada di Desil 1 (< Rp 641.443 / kapita / bulan). Masuk kategori Poor (Garis Kemiskinan Nasional & Standar Ekstrem Bank Dunia).',
+      2: 'Estimasi berada di Desil 2 (Rp 641.443 – Rp 962.165 / kapita / bulan). Masuk kategori Vulnerable (Rentan Miskin / 1.0x – 1.5x Garis Kemiskinan).',
+      3: 'Estimasi berada di Desil 3 (Rp 962.165 – Rp 1.350.000 / kapita / bulan). Masuk kategori Aspiring Middle Class Bawah (di sekitar Garis UMIC $6.85 Bank Dunia).',
+      4: 'Estimasi berada di Desil 4 (Rp 1.350.000 – Rp 1.750.000 / kapita / bulan). Masuk kategori Aspiring Middle Class (Menuju Kelas Menengah).',
+      5: 'Estimasi berada di Desil 5 (Rp 1.750.000 – Rp 2.245.051 / kapita / bulan). Masuk kategori Aspiring Middle Class Atas (3.5x Garis Kemiskinan).',
+      6: 'Estimasi berada di Desil 6 (Rp 2.245.051 – Rp 3.500.000 / kapita / bulan). Masuk kategori Middle Class Pemula (Ambang Kelas Menengah Aman Bank Dunia).',
+      7: 'Estimasi berada di Desil 7 (Rp 3.500.000 – Rp 5.200.000 / kapita / bulan). Masuk kategori Middle Class Inti (Kelas Menengah Mapan).',
+      8: 'Estimasi berada di Desil 8 (Rp 5.200.000 – Rp 7.500.000 / kapita / bulan). Masuk kategori Upper-Middle Class (Kelas Menengah Atas).',
+      9: 'Estimasi berada di Desil 9 (Rp 7.500.000 – Rp 10.904.531 / kapita / bulan). Masuk kategori Near Upper Class (Puncak Kelas Menengah).',
+      10: '☝️🤓 Estimasi Desil 10! Berada di kategori Upper Class Sejati Bank Dunia (> Rp 10.904.531 / orang / bulan / > 17x Garis Kemiskinan).'
     };
 
     function render(data) {
       const {
         householdSize,
+        educationLevel,
+        chronicDisease,
+        disability,
         monthlyWages,
         hasBusiness,
         annualBusinessProfit,
+        houseOwnership,
         houseSizeM2,
+        floorType,
+        wallType,
+        roofType,
+        waterSource,
+        sanitationFacility,
+        electricityPower,
         landSizeM2,
+        livestockValue,
         carCount,
         carAvgValue,
         motorCount,
         motorAvgValue,
-        otherVehicleValue,
         phoneCount,
         phoneAvgValue,
         laptopCount,
@@ -368,15 +508,33 @@ document.addEventListener('DOMContentLoaded', () => {
         householdSize
       });
       const totalMonthlyIncome = monthlyWages + (effectiveProfit / 12);
-      const { desil, percentileExact, rawPercentile } = EconomicEngine.computeDesil(perCapitaMonthly);
+
+      // Multidimensional MPI Evaluation
+      const mpi = EconomicEngine.evaluateMPI({
+        educationLevel,
+        chronicDisease,
+        disability,
+        houseOwnership,
+        houseSizeM2,
+        householdSize,
+        floorType,
+        wallType,
+        roofType,
+        waterSource,
+        sanitationFacility,
+        electricityPower
+      });
+
+      const { desil, percentileExact, rawPercentile, dailyPPP, wbClass, effectivePerCapita } = EconomicEngine.computeDesil(perCapitaMonthly, mpi.totalMod);
+      
       const assets = EconomicEngine.computeAssetIndex({
         houseSizeM2,
         landSizeM2,
+        livestockValue,
         carCount,
         carAvgValue,
         motorCount,
         motorAvgValue,
-        otherVehicleValue,
         phoneCount,
         phoneAvgValue,
         laptopCount,
@@ -395,13 +553,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const elAssetTotal = document.getElementById('res-asset-total');
       const elAssetBreakdown = document.getElementById('res-asset-breakdown');
 
-      if (elPercentileLabel) elPercentileLabel.textContent = `Persentil ~${percentileExact.toFixed(1)}% Nasional`;
+      // MPI Elements
+      const elMpiHousing = document.getElementById('res-mpi-housing');
+      const elMpiHousingSub = document.getElementById('res-mpi-housing-sub');
+      const elMpiWash = document.getElementById('res-mpi-wash');
+      const elMpiWashSub = document.getElementById('res-mpi-wash-sub');
+      const elMpiEdu = document.getElementById('res-mpi-education');
+      const elMpiEduSub = document.getElementById('res-mpi-education-sub');
+      const elMpiHealth = document.getElementById('res-mpi-health');
+      const elMpiHealthSub = document.getElementById('res-mpi-health-sub');
+
+      if (elPercentileLabel) elPercentileLabel.textContent = `Persentil ~${percentileExact.toFixed(1)}% • ${wbClass.name}`;
       if (elDecileTitle) elDecileTitle.textContent = `Desil ${desil} ${desil === 10 ? '☝️🤓' : ''}`;
       if (elDecileVerdict) elDecileVerdict.textContent = DECILE_VERDICTS[desil] || DECILE_VERDICTS[10];
-      if (elPerCapita) elPerCapita.textContent = FormController.formatIDR(perCapitaMonthly);
+      if (elPerCapita) elPerCapita.textContent = FormController.formatIDR(effectivePerCapita) + ` (~$${dailyPPP.toFixed(2)}/hari PPP)`;
       if (elTotalIncome) elTotalIncome.textContent = FormController.formatIDR(totalMonthlyIncome);
       if (elHouseholdNote) elHouseholdNote.textContent = `dibagi ${householdSize} orang anggota keluarga`;
       if (elAssetTotal) elAssetTotal.textContent = FormController.formatIDR(assets.total);
+
+      // Render MPI Cards
+      if (elMpiHousing) elMpiHousing.textContent = mpi.housing.title;
+      if (elMpiHousingSub) elMpiHousingSub.textContent = mpi.housing.sub;
+      if (elMpiWash) elMpiWash.textContent = mpi.wash.title;
+      if (elMpiWashSub) elMpiWashSub.textContent = mpi.wash.sub;
+      if (elMpiEdu) elMpiEdu.textContent = mpi.education.title;
+      if (elMpiEduSub) elMpiEduSub.textContent = mpi.education.sub;
+      if (elMpiHealth) elMpiHealth.textContent = mpi.health.title;
+      if (elMpiHealthSub) elMpiHealthSub.textContent = mpi.health.sub;
 
       // 2. SVG Bell Curve Pin Marker Positioning
       const svgUserPin = document.getElementById('svg-user-pin');
@@ -423,9 +601,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const items = [
           { label: `Rumah Tinggal (${houseSizeM2} m²)`, val: assets.houseVal },
           { label: `Tanah/Properti Lain (${landSizeM2} m²)`, val: assets.landVal },
+          { label: 'Hewan Ternak Produktif', val: assets.livestockVal },
           { label: `Mobil (${carCount} unit)`, val: assets.carVal },
           { label: `Motor (${motorCount} unit)`, val: assets.motorVal },
-          { label: 'Kendaraan Lain', val: assets.otherVehVal },
           { label: `Smartphone/Tablet (${phoneCount} unit)`, val: assets.phoneVal },
           { label: `Laptop/PC (${laptopCount} unit)`, val: assets.laptopVal },
           { label: 'Elektronik Rumah Tangga', val: assets.electronicsVal },
@@ -459,12 +637,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       // 5. Summary Text for Clipboard
       lastCopyPayload = `Aku Desil 10 ☝️🤓
-Ringkasan Estimasi Desil Pengeluaran:
+Ringkasan Estimasi Desil Standar Bank Dunia (World Bank & MPI):
 • Estimasi: Desil ${desil} (~persentil ${percentileExact.toFixed(1)}%)
-• Kapasitas Per Orang: ${FormController.formatIDR(perCapitaMonthly)} / bulan
+• Kategori: ${wbClass.name}
+• Kapasitas Per Orang: ${FormController.formatIDR(effectivePerCapita)} / bulan (~$${dailyPPP.toFixed(2)}/hari PPP)
+• Evaluasi Multidimensi: ${mpi.housing.title} | ${mpi.wash.title} | ${mpi.health.title}
 • Total Penghasilan RT: ${FormController.formatIDR(totalMonthlyIncome)} / bulan (${householdSize} orang)
 • Aset Index: ${FormController.formatIDR(assets.total)}
-(Simulasi model statistik per kapita mandiri)`;
+(Simulasi model Bank Dunia Aspiring Indonesia & Multidimensional Poverty Index)`;
     }
 
     function getCopyPayload() {

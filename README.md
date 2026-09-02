@@ -8,7 +8,7 @@
 🌐 **Akses Langsung Aplikasi (Live Demo):** [https://helggaa.github.io/Aku-Desil-10/](https://helggaa.github.io/Aku-Desil-10/)
 
 > **📌 Penafian Resmi (Disclaimer):**  
-> Aplikasi ini adalah alat **simulasi & estimasi statistik mandiri** untuk tujuan edukasi dan literasi data publik. Aplikasi ini **tidak berafiliasi dengan lembaga pemerintah mana pun** (Kemensos, BPS, DTSEN, dll.), tidak menggunakan data identitas individu resmi pemerintah, dan tidak dapat digunakan sebagai dasar penetapan maupun pencabutan program bantuan sosial atau subsidi resmi.
+> Aplikasi ini adalah alat **simulasi & estimasi statistik mandiri** berbasis standar Bank Dunia (*World Bank*) dan Indikator Kemiskinan Multidimensi (*Multidimensional Poverty Index - MPI*) untuk tujuan edukasi dan literasi data publik. Aplikasi ini **tidak berafiliasi dengan lembaga pemerintah mana pun** (Kemensos, BPS, DTSEN, dll.) dan tidak dapat digunakan sebagai dasar penetapan maupun pencabutan program bantuan sosial atau subsidi resmi.
 
 ---
 
@@ -21,78 +21,71 @@
   <br>
   
   <img src="assets/preview-form.png" alt="Tampilan Formulir Pengisian Data Ekonomi" width="700">
-  <p><em>Halaman Formulir Input Data Ekonomi (Form View)</em></p>
+  <p><em>Halaman Formulir Input Data Ekonomi & 5 Dimensi Multidimensi (Form View)</em></p>
 </div>
 
 ---
 
-## 🌟 Latar Belakang & Tujuan
+## 🌟 Latar Belakang & Masalah Standar Kemiskinan
 
-Banyak warga masyarakat yang bingung atau mengalami salah klasifikasi desil ekonomi oleh sistem algoritma tertutup pemerintah (*proxy-means testing*), di mana variabel semu (seperti mewarisi rumah tua keluarga atau memiliki 1 motor tua untuk bekerja) kerap langsung menggelembungkan skor desil menjadi Desil 9–10 padahal daya beli per kapita riilnya sangat terbatas.
+Banyak warga masyarakat bingung mengapa pendapatan yang pas-pasan (misal Rp 2–3 juta di perkotaan) kerap diklaim oleh sistem algoritma tertutup pemerintah (*proxy-means testing*) sebagai **"Desil 10 / 10% Terkaya"**. 
 
-**Aku Desil 10** hadir sebagai kalkulator mandiri yang **100% transparan, objektif, dan privat**:
-- Menghitung **kapasitas ekonomi riil per kapita** (pendapatan bulanan dibagi seluruh anggota keluarga yang ditanggung).
-- Memisahkan **Aset Index** secara mandiri agar kepemilikan fisik tidak mendistorsi desil pengeluaran rutin bulanan.
-- Menampilkan visualisasi kurva distribusi populasi 280 juta jiwa Indonesia secara interaktif.
+Hal ini terjadi karena **Garis Kemiskinan Nasional (BPS)** dipatok sangat rendah (hanya sekitar **Rp 641.443 / orang / bulan** atau ~Rp 21.000 / hari). Akibat baseline yang sangat rendah ini, seseorang dengan pengeluaran > Rp 1.540.000 / kapita sudah langsung terdorong ke Desil 10 nasional, padahal daya belinya masih rentan dan mungkin menanggung beban sakit kronis atau hunian substandar.
 
----
-
-## ✨ Fitur Utama
-
-- **Alur 3 Halaman Terstruktur (*3-Phase Multi-View Flow*)**:
-  1. **Halaman Pembuka (*Opening*)**: Pengantar ringkas & ajakan cek desil.
-  2. **Halaman Formulir (*Form*)**: Pengisian data demografi, upah, usaha, dan aset dengan kontrol taktil (*steppers* `+`/`-` dan *quick preset chips*).
-  3. **Halaman Hasil (*Results*)**: Dashboard analisis dengan kurva lonceng interaktif, skala 10 segmen, dan matriks finansial.
-- **Visualisasi Kurva Distribusi Populasi (Interactive SVG Bell Curve)**:
-  - Memetakan posisi persentil ($\Phi(z)$) pengguna secara dinamis dengan penanda pin *"Kamu di Sini"*.
-  - Dilengkapi garis acuan Garis Kemiskinan Nasional (Rp 641rb) dan Median Nasional (Rp 1.01jt).
-- **Perlindungan Scroll Roda Mouse (*Scroll-Wheel Protection*)**:
-  - Mencegah perubahan nilai angka input saat pengguna melakukan *scroll* halaman dengan trackpad atau mouse wheel.
-- **Tombol Cepat Nilai Aset (*Quick Preset Chips*)**:
-  - Tombol instan untuk mobil (*100 Jt, 200 Jt, 500 Jt, 1 M*), motor (*8 Jt, 10 Jt, 15 Jt, 20 Jt, 35 Jt+*), gadget, laptop, dan tabungan.
-- **Privacy by Absence (100% Client-Side)**:
-  - ❌ Tidak ada backend / server API.
-  - ❌ Tidak ada cookies, `localStorage`, atau `sessionStorage`.
-  - ❌ Tidak ada analytics, pelacak pihak ketiga, atau remote CDN.
-  - ❌ Tidak meminta data pribadi identitas (Nama, NIK, No HP, Alamat).
+**Aku Desil 10** mengintegrasikan **Standar Bank Dunia (*World Bank*) & Evaluasi Multidimensi (MPI)**:
+- Menggunakan metodologi resmi Bank Dunia (*Aspiring Indonesia: Expanding the Middle Class* & *World Bank PIP*).
+- Menghitung daya beli riil dalam **USD PPP (Purchasing Power Parity)** per hari ($1\text{ USD PPP} \approx \text{Rp } 5.420$).
+- Memperhitungkan **5 Pilar Kesejahteraan Multidimensi**: Pendidikan, Kualitas Hunian, Sanitasi & Air Bersih (WASH), Beban Penyakit Kronis/Disabilitas, serta Kapasitas Daya Listrik & Aset/Ternak.
 
 ---
 
-## 📐 Metodologi & Kalibrasi Statistik
+## 📋 5 Pilar Evaluasi Multidimensi (MPI)
 
-### 1. Kapasitas Ekonomi Per Kapita
-$$\text{Kapasitas Per Kapita} = \frac{\text{Gaji Bulanan} + \left(\frac{\text{Laba Bersih Usaha Tahunan}}{12}\right)}{\text{Jumlah Anggota Keluarga}}$$
+1. **Tingkat Pendidikan**: Melihat jenjang pendidikan tertinggi anggota keluarga (Tidak Sekolah/SD, SMP, SMA/SMK, Diploma, hingga Sarjana S1/S2/S3) sebagai modal manusia (*Human Capital*).
+2. **Kondisi & Kualitas Tempat Tinggal**: Mengukur luas lantai per kapita ($\text{m}^2/\text{orang}$), jenis lantai (keramik vs tanah), dinding (bata vs bambu), atap (genteng vs rumbia), dan status kepemilikan.
+3. **Akses Sanitasi & Air Minum (WASH)**: Sumber air minum aman (kemasan/PDAM vs sungai) dan fasilitas jamban leher angsa dengan tangki septik.
+4. **Kesehatan & Disabilitas**: Memperhitungkan beban pengeluaran rutin akibat riwayat penyakit kronis/menahun (gagal ginjal, jantung, kanker, diabetes, stroke) dan kebutuhan pendampingan disabilitas berat.
+5. **Kapasitas Daya & Aset Produktif**: Kapasitas daya listrik PLN (450 VA bersubsidi s/d $\ge 3.500\text{ VA}$), kendaraan bermotor, perangkat elektronik, hewan ternak (sapi/kambing/unggas), lahan produktif, dan simpanan emas/tabungan.
 
-### 2. Model Distribusi Lognormal BPS Susenas
-Distribusi pengeluaran penduduk Indonesia dimodelkan melalui fungsi probabilitas kumulatif (*Cumulative Distribution Function* - CDF) lognormal:
-$$\ln(X) \sim \mathcal{N}(\mu, \sigma)$$
+---
 
-**Parameter Kalibrasi**:
-- $\mu = 13.8265$
-- $\sigma = 0.328$
+## 📐 Metodologi & Kalibrasi Standar Bank Dunia
 
-**Titik Jangkar Data BPS**:
-- **Garis Kemiskinan Nasional**: Rp 641.443/kapita/bulan = persentil ke-8,25.
-- **Rata-rata Pengeluaran Per Kapita**: Rp 1.066.833/bulan (Rp 12.802.000/tahun).
+### 1. Kapasitas Ekonomi & Penyesuaian Multidimensi
+$$\text{Kapasitas Moneter Per Kapita} = \frac{\text{Gaji Bulanan} + \left(\frac{\text{Laba Usaha Tahunan}}{12}\right)}{\text{Jumlah Anggota Keluarga}}$$
 
-### 3. Batas Desil Pengeluaran Nasional (IDR/Bulan/Kapita)
-| Desil | Batas Bawah | Batas Atas | Kategori |
+$$\text{Kapasitas Efektif} = \text{Kapasitas Moneter} \times (1 + \Delta_{\text{Pendidikan}} + \Delta_{\text{Hunian}} + \Delta_{\text{Sanitasi}} + \Delta_{\text{Listrik}} - \Delta_{\text{Beban Kesehatan}})$$
+
+$$\text{Kapasitas Harian (USD PPP)} = \frac{\text{Kapasitas Efektif}}{30,416 \times 5.420}$$
+
+### 2. Lima Kelas Ekonomi Bank Dunia (*World Bank Aspiring Indonesia*)
+
+| Kelompok Ekonomi Bank Dunia | Kelipatan Garis BPS | Pengeluaran / Kapita / Bulan | Persentase Populasi Indonesia |
 |---|---|---|---|
-| **Desil 1** | Rp 0 | Rp 664.000 | 10% Terbawah (Prioritas Bansos) |
-| **Desil 2** | Rp 664.000 | Rp 767.000 | Rentan Miskin |
-| **Desil 3** | Rp 767.000 | Rp 851.000 | Menengah-Bawah |
-| **Desil 4** | Rp 851.000 | Rp 931.000 | Menengah-Bawah |
-| **Desil 5** | Rp 931.000 | Rp 1.011.000 | Median Nasional (50% Tengah) |
-| **Desil 6** | Rp 1.011.000 | Rp 1.099.000 | Menengah |
-| **Desil 7** | Rp 1.099.000 | Rp 1.201.000 | Menengah Mapan |
-| **Desil 8** | Rp 1.201.000 | Rp 1.333.000 | 20% Teratas |
-| **Desil 9** | Rp 1.333.000 | Rp 1.539.000 | Mapan Atas |
-| **Desil 10 ☝️🤓** | > Rp 1.539.000 | $\infty$ | 10% Teratas (Sultan Statistik) |
+| **1. Poor (Miskin Ekstrem)** | $< 1.0\times$ | $< \text{Rp } 641.443$ | ~8.0% |
+| **2. Vulnerable (Rentan Miskin)** | $1.0 - 1.5\times$ | $\text{Rp } 641.443 - \text{Rp } 962.165$ | ~15.6% |
+| **3. Aspiring Middle Class (Menuju Menengah)** | $1.5 - 3.5\times$ | $\text{Rp } 962.165 - \text{Rp } 2.245.051$ | **45% (115 Juta Jiwa)** |
+| **4. Middle Class Sejati (Aman Finansial)** | $3.5 - 17\times$ | $\text{Rp } 2.245.051 - \text{Rp } 10.904.531$ | ~20% |
+| **5. Upper Class (Desil 10 Sejati)** | $> 17\times$ | **$> \text{Rp } 10.904.531$** | **~10% Teratas** |
+
+### 3. Batas 10 Desil Standar Bank Dunia (IDR/Bulan/Kapita)
+| Desil | Rentang Rupiah / Bulan | Setara USD PPP / Hari | Kategori Standar Bank Dunia |
+|---|---|---|---|
+| **Desil 1** | $< \text{Rp } 641.443$ | $< \$3.89$ | Poor (Garis Kemiskinan Nasional & LMIC) |
+| **Desil 2** | $\text{Rp } 641.443 - \text{Rp } 962.165$ | $\$3.89 - \$5.84$ | Vulnerable (Rentan Miskin / 1.5x Garis BPS) |
+| **Desil 3** | $\text{Rp } 962.165 - \text{Rp } 1.350.000$ | $\$5.84 - \$8.19$ | Aspiring Middle Class (Garis UMIC $6.85 Bank Dunia) |
+| **Desil 4** | $\text{Rp } 1.350.000 - \text{Rp } 1.750.000$ | $\$8.19 - \$10.62$ | Aspiring Middle Class (Menuju Kelas Menengah) |
+| **Desil 5** | $\text{Rp } 1.750.000 - \text{Rp } 2.245.051$ | $\$10.62 - \$13.62$ | Aspiring Middle Class Atas (3.5x Garis BPS) |
+| **Desil 6** | $\text{Rp } 2.245.051 - \text{Rp } 3.500.000$ | $\$13.62 - \$21.23$ | Middle Class Pemula (Ambang Kelas Menengah Aman) |
+| **Desil 7** | $\text{Rp } 3.500.000 - \text{Rp } 5.200.000$ | $\$21.23 - \$31.54$ | Middle Class Inti (Kelas Menengah Mapan) |
+| **Desil 8** | $\text{Rp } 5.200.000 - \text{Rp } 7.500.000$ | $\$31.54 - \$45.50$ | Upper-Middle Class (Menengah Atas) |
+| **Desil 9** | $\text{Rp } 7.500.000 - \text{Rp } 10.904.531$ | $\$45.50 - \$66.15$ | Near Upper Class (Puncak Kelas Menengah / 17x BPS) |
+| **Desil 10 ☝️🤓** | **$> \text{Rp } 10.904.531$** | **$> \$66.15$** | **Upper Class Sejati Bank Dunia (> 17x BPS)** |
 
 ### 4. Formula Pembobotan Aset Index
 $$\begin{aligned}
-\text{Aset Index} = & \;(\text{Luas Rumah} \times 500.000) + (\text{Luas Tanah Lain} \times 300.000) \\
-& + (\text{Mobil} \times \text{Nilai Mobil} \times 0.1) + (\text{Motor} \times \text{Nilai Motor} \times 0.1) + (\text{Kendaraan Lain} \times 0.1) \\
+\text{Aset Index} = & \;(\text{Luas Rumah} \times 500.000) + (\text{Luas Lahan Lain} \times 300.000) + (\text{Nilai Ternak} \times 0.5) \\
+& + (\text{Mobil} \times \text{Nilai Mobil} \times 0.1) + (\text{Motor} \times \text{Nilai Motor} \times 0.1) \\
 & + (\text{HP} \times \text{Nilai HP} \times 0.2) + (\text{Laptop} \times \text{Nilai Laptop} \times 0.2) + (\text{Elektronik} \times 0.2) \\
 & + (\text{Emas \& Tabungan} \times 0.5)
 \end{aligned}$$
@@ -102,15 +95,11 @@ $$\begin{aligned}
 ## 🚀 Cara Menjalankan
 
 ### A. Buka Langsung (Lokal)
-Cukup buka file `index.html` di peramban web modern apa pun (*Chrome, Firefox, Safari, Edge*). Tidak memerlukan instalasi, dependensi `npm`, maupun server backend.
+Cukup buka file `index.html` di browser modern apa pun (*Chrome, Firefox, Safari, Edge*). Tidak memerlukan instalasi atau backend.
 
 ### B. Akses GitHub Pages
 Website aktif dan dapat langsung dibuka di:  
 👉 **[https://helggaa.github.io/Aku-Desil-10/](https://helggaa.github.io/Aku-Desil-10/)**
-
-Jika melakukan *fork* atau *re-deploy*:
-1. Buka menu **Settings** > **Pages** di repositori GitHub.
-2. Pada bagian **Build and deployment**, pilih Source: **Deploy from a branch** > Branch: `main` > Folder: `/ (root)` > **Save**.
 
 ---
 

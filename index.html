@@ -1,50 +1,56 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aku Desil 10 ☝️🤓 — Simulasi Estimasi Desil Ekonomi Indonesia</title>
-  <meta name="description" content="Simulasi interaktif estimasi desil ekonomi keluarga Indonesia berbasis kurva distribusi pengeluaran per kapita Susenas BPS. 100% diproses di peramban tanpa server.">
+  <meta name="description"
+    content="Simulasi interaktif estimasi desil ekonomi keluarga Indonesia berbasis standar Bank Dunia (World Bank) dan 5 indikator kesejahteraan multidimensi. 100% diproses di peramban tanpa server.">
   <meta name="theme-color" content="#0c0e12">
-  
+
   <!-- Security Headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'self'; object-src 'none'; media-src 'none'; child-src 'none'; form-action 'self';">
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; font-src 'self'; object-src 'none'; media-src 'none'; child-src 'none'; form-action 'self';">
   <meta name="referrer" content="no-referrer">
   <meta http-equiv="Permissions-Policy" content="geolocation=(), camera=(), microphone=(), payment=(), usb=()">
-  
+
   <!-- Open Graph / Social Sharing -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Aku Desil 10 ☝️🤓 — Simulasi Estimasi Desil Ekonomi Indonesia">
-  <meta property="og:description" content="Cek estimasi posisi desil ekonomi rumah tanggamu secara transparan dan mandiri. 100% diproses langsung di browsermu.">
+  <meta property="og:description"
+    content="Cek estimasi posisi desil ekonomi rumah tanggamu secara transparan dan mandiri. 100% diproses langsung di browsermu.">
   <meta property="og:image" content="assets/preview-landing.png">
-  
+
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Aku Desil 10 ☝️🤓 — Simulasi Estimasi Desil Ekonomi Indonesia">
-  <meta name="twitter:description" content="Cek estimasi posisi desil ekonomi rumah tanggamu secara transparan dan mandiri.">
+  <meta name="twitter:description"
+    content="Cek estimasi posisi desil ekonomi rumah tanggamu secara transparan dan mandiri.">
   <meta name="twitter:image" content="assets/preview-landing.png">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
   <div class="site-container">
-    
+
     <!-- Masthead -->
     <header class="app-masthead">
       <div class="masthead-content">
         <div class="brand-block">
           <span class="brand-tag">Simulasi Mandiri</span>
           <h1 class="brand-title">Aku Desil 10 ☝️🤓</h1>
-          <p class="brand-desc">Kalkulator kurva distribusi pengeluaran per kapita keluarga Indonesia</p>
+          <p class="brand-desc">Kalkulator kurva distribusi kapasitas ekonomi standar Bank Dunia (World Bank)</p>
         </div>
       </div>
     </header>
 
     <!-- Main Workspace -->
     <main class="app-main">
-      
+
       <!-- ===================================================================
            PAGE 1: OPENING / LANDING VIEW
            =================================================================== -->
@@ -53,7 +59,8 @@
           <div class="opening-badge">Kalkulator Desil Terbuka</div>
           <h2 class="opening-heading">Yahaha dapat desil 10 ya? ☝️🤓</h2>
           <p class="opening-lead">
-            Coba cek sekarang posisi kapasitas ekonomimu di antara 280 juta penduduk Indonesia berdasarkan model statistik pengeluaran per kapita!
+            Coba cek sekarang posisi kapasitas ekonomimu di antara seluruh keluarga di Indonesia berdasarkan standar
+            resmi Bank Dunia (World Bank Aspiring Indonesia &amp; PIP)!
           </p>
 
           <div class="opening-action">
@@ -75,14 +82,14 @@
         </div>
 
         <form id="decile-form" novalidate>
-          
-          <!-- Step 1: Rumah Tangga -->
+
+          <!-- Step 1: Demografi, Pendidikan & Beban Kesehatan -->
           <div class="input-card">
             <div class="input-card-header">
               <div class="step-badge">1</div>
               <div>
-                <h2 class="card-heading">Keluarga &amp; Tanggungan</h2>
-                <p class="card-sub">Penentu pembagi kapasitas ekonomi riil per orang.</p>
+                <h2 class="card-heading">Demografi, Pendidikan &amp; Kesehatan</h2>
+                <p class="card-sub">Modal manusia, jumlah tanggungan, dan beban kerentanan keluarga.</p>
               </div>
             </div>
 
@@ -93,37 +100,61 @@
                   <span class="required-indicator">*</span>
                 </label>
                 <div class="stepper-input-wrap">
-                  <button type="button" class="stepper-btn" data-target="householdSize" data-delta="-1" aria-label="Kurangi anggota">-</button>
-                  <input
-                    type="number"
-                    id="householdSize"
-                    name="householdSize"
-                    class="stepper-field"
-                    min="1"
-                    max="30"
-                    step="1"
-                    value="1"
-                    required
-                  >
-                  <button type="button" class="stepper-btn" data-target="householdSize" data-delta="1" aria-label="Tambah anggota">+</button>
+                  <button type="button" class="stepper-btn" data-target="householdSize" data-delta="-1"
+                    aria-label="Kurangi anggota">-</button>
+                  <input type="number" id="householdSize" name="householdSize" class="stepper-field" min="1" max="30"
+                    step="1" value="1" required>
+                  <button type="button" class="stepper-btn" data-target="householdSize" data-delta="1"
+                    aria-label="Tambah anggota">+</button>
                   <span class="stepper-unit">Orang</span>
                 </div>
-                <span class="control-hint">Total orang yang makan &amp; tinggal bersama (termasuk kamu).</span>
+                <span class="control-hint">Total orang yang tinggal &amp; makan bersama (termasuk kamu).</span>
                 <span class="field-error" id="error-householdSize">Jumlah anggota keluarga minimal 1 orang.</span>
               </div>
 
               <div class="control-group">
-                <label for="pekerjaan" class="control-label">Pekerjaan Utama</label>
+                <label for="educationLevel" class="control-label">Tingkat Pendidikan Tertinggi dalam Keluarga</label>
                 <div class="custom-select-box">
-                  <select id="pekerjaan" name="pekerjaan" class="form-select">
-                    <option value="" disabled selected>Pilih jenis pekerjaan...</option>
-                    <option value="Karyawan">Karyawan Swasta / BUMN / ASN</option>
-                    <option value="Wiraswasta">Wiraswasta / Pengusaha / Pedagang</option>
-                    <option value="Freelance">Pekerja Lepas (Freelance) / Profesional</option>
-                    <option value="Pelajar">Pelajar / Mahasiswa</option>
-                    <option value="Belum Bekerja">Belum / Tidak Bekerja</option>
-                    <option value="Lainnya">Lainnya / Pensiunan</option>
+                  <select id="educationLevel" name="educationLevel" class="form-select">
+                    <option value="SD">Tidak Sekolah / Tamat SD Sederajat</option>
+                    <option value="SMP">SMP / MTs Sederajat</option>
+                    <option value="SMA" selected>SMA / SMK / MA Sederajat</option>
+                    <option value="Diploma">Diploma (D1 – D4) / Akademi</option>
+                    <option value="Sarjana">Sarjana (S1 / S2 / S3)</option>
                   </select>
+                </div>
+                <span class="control-hint">Jenjang pendidikan tertinggi yang telah ditamatkan anggota keluarga.</span>
+              </div>
+
+              <div class="grid-two-col">
+                <div class="control-group">
+                  <label class="control-label">Riwayat Penyakit Kronis / Menahun?</label>
+                  <div class="toggle-switch-group" role="radiogroup">
+                    <label class="toggle-option">
+                      <input type="radio" name="chronicDisease" value="no" checked>
+                      <span class="toggle-btn">Tidak Ada</span>
+                    </label>
+                    <label class="toggle-option">
+                      <input type="radio" name="chronicDisease" value="yes">
+                      <span class="toggle-btn">Ada</span>
+                    </label>
+                  </div>
+                  <span class="control-hint">Gagal ginjal, kanker, stroke, diabetes kronis, jantung.</span>
+                </div>
+
+                <div class="control-group">
+                  <label class="control-label">Anggota dengan Disabilitas Berat?</label>
+                  <div class="toggle-switch-group" role="radiogroup">
+                    <label class="toggle-option">
+                      <input type="radio" name="disability" value="no" checked>
+                      <span class="toggle-btn">Tidak Ada</span>
+                    </label>
+                    <label class="toggle-option">
+                      <input type="radio" name="disability" value="yes">
+                      <span class="toggle-btn">Ada</span>
+                    </label>
+                  </div>
+                  <span class="control-hint">Keterbatasan permanen yang butuh pendampingan total.</span>
                 </div>
               </div>
             </div>
@@ -134,8 +165,8 @@
             <div class="input-card-header">
               <div class="step-badge">2</div>
               <div>
-                <h2 class="card-heading">Penghasilan Rumah Tangga</h2>
-                <p class="card-sub">Gaji tetap rutin bulanan dan omzet keuntungan usaha tahunan.</p>
+                <h2 class="card-heading">Penghasilan &amp; Usaha Rumah Tangga</h2>
+                <p class="card-sub">Gaji rutin bulanan dan omzet laba usaha tahunan keluarga.</p>
               </div>
             </div>
 
@@ -144,24 +175,22 @@
                 <label for="monthlyWages" class="control-label">Gaji / Upah Rutin Bulanan</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input
-                    type="number"
-                    id="monthlyWages"
-                    name="monthlyWages"
-                    class="form-text-input currency-input"
-                    min="0"
-                    step="100000"
-                    value="0"
-                  >
+                  <input type="number" id="monthlyWages" name="monthlyWages" class="form-text-input currency-input"
+                    min="0" step="100000" value="0">
                 </div>
-                
+
                 <!-- Quick Preset Chips -->
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="3000000">3 Juta</button>
-                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="5500000">UMR (5.5 Jt)</button>
-                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="10000000">10 Juta</button>
-                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="25000000">25 Juta</button>
-                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="50000000">50 Juta</button>
+                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="3000000">3
+                    Juta</button>
+                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="5500000">5
+                    Juta</button>
+                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="10000000">10
+                    Juta</button>
+                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="25000000">25
+                    Juta</button>
+                  <button type="button" class="preset-chip" data-input="monthlyWages" data-value="50000000">50
+                    Juta</button>
                 </div>
                 <div class="live-counter-display" id="preview-monthlyWages">Rp 0</div>
               </div>
@@ -186,69 +215,145 @@
                 </label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input
-                    type="number"
-                    id="annualBusinessProfit"
-                    name="annualBusinessProfit"
-                    class="form-text-input currency-input"
-                    min="0"
-                    step="1000000"
-                    value="0"
-                  >
+                  <input type="number" id="annualBusinessProfit" name="annualBusinessProfit"
+                    class="form-text-input currency-input" min="0" step="1000000" value="0">
                 </div>
-                <span class="control-hint">Akan dikonversi per bulan (dibagi 12) pada formula.</span>
+                <span class="control-hint">Dikonversi per bulan (dibagi 12) dalam formula ekonomi.</span>
                 <div class="live-counter-display" id="preview-annualBusinessProfit">Rp 0 / tahun</div>
-              </div>
-
-              <div class="control-group">
-                <label for="monthlyExpenses" class="control-label">Estimasi Pengeluaran Bulanan Keluarga</label>
-                <div class="currency-input-wrap">
-                  <span class="currency-label">Rp</span>
-                  <input
-                    type="number"
-                    id="monthlyExpenses"
-                    name="monthlyExpenses"
-                    class="form-text-input currency-input"
-                    min="0"
-                    step="100000"
-                    value="0"
-                  >
-                </div>
-                <div class="live-counter-display" id="preview-monthlyExpenses">Rp 0</div>
               </div>
             </div>
           </div>
 
-          <!-- Step 3: Aset Fisik & Tabungan -->
+          <!-- Step 3: Kondisi & Kualitas Tempat Tinggal -->
           <div class="input-card">
             <div class="input-card-header">
               <div class="step-badge">3</div>
               <div>
-                <h2 class="card-heading">Aset &amp; Barang Berharga</h2>
-                <p class="card-sub">Valuasi pelengkap untuk kalkulasi Aset Index.</p>
+                <h2 class="card-heading">Kondisi &amp; Kualitas Tempat Tinggal</h2>
+                <p class="card-sub">Struktur fisik bangunan, luas per kapita, dan status hunian.</p>
               </div>
             </div>
 
             <div class="card-content">
-              
-              <div class="category-divider">Properti &amp; Tanah</div>
               <div class="grid-two-col">
                 <div class="control-group">
-                  <label for="houseSizeM2" class="control-label">Luas Rumah Tinggal</label>
-                  <div class="unit-input-wrap">
-                    <input type="number" id="houseSizeM2" name="houseSizeM2" class="form-text-input" min="0" value="0">
-                    <span class="unit-text">m²</span>
+                  <label for="houseOwnership" class="control-label">Status Kepemilikan Rumah</label>
+                  <div class="custom-select-box">
+                    <select id="houseOwnership" name="houseOwnership" class="form-select">
+                      <option value="Milik Sendiri" selected>Milik Sendiri / Bebas Sewa</option>
+                      <option value="Kontrak">Sewa / Kontrak / Kost</option>
+                      <option value="Menumpang">Menumpang Keluarga / Lainnya</option>
+                    </select>
                   </div>
-                  <span class="control-hint">Milik pribadi (isi 0 jika sewa).</span>
                 </div>
 
                 <div class="control-group">
-                  <label for="landSizeM2" class="control-label">Tanah / Properti Lain</label>
+                  <label for="houseSizeM2" class="control-label">Luas Rumah Tinggal</label>
                   <div class="unit-input-wrap">
-                    <input type="number" id="landSizeM2" name="landSizeM2" class="form-text-input" min="0" value="0">
+                    <input type="number" id="houseSizeM2" name="houseSizeM2" class="form-text-input" min="0" value="36">
                     <span class="unit-text">m²</span>
                   </div>
-                  <span class="control-hint">Kavling, kebun, kontrakan.</span>
+                  <span class="control-hint">Luas bangunan yang ditempati bersama.</span>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label for="floorType" class="control-label">Jenis Lantai Utama Terluas</label>
+                <div class="custom-select-box">
+                  <select id="floorType" name="floorType" class="form-select">
+                    <option value="Keramik/Granit" selected>Keramik / Granit / Marmer / Ubin Mewah</option>
+                    <option value="Semen/Kayu">Semen / Plesteran / Kayu Olahan Baik</option>
+                    <option value="Tanah/Bambu">Tanah / Bambu / Kayu Sederhana Tanpa Plester</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid-two-col">
+                <div class="control-group">
+                  <label for="wallType" class="control-label">Jenis Dinding Utama</label>
+                  <div class="custom-select-box">
+                    <select id="wallType" name="wallType" class="form-select">
+                      <option value="Tembok Bata" selected>Tembok Bata Plester / Beton Kokoh</option>
+                      <option value="Setengah Tembok">Setengah Tembok / Kayu Kualitas Baik</option>
+                      <option value="Bambu/Kayu Lapuk">Bambu / Anyaman / Kayu Tidak Diplester</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label for="roofType" class="control-label">Jenis Atap Utama</label>
+                  <div class="custom-select-box">
+                    <select id="roofType" name="roofType" class="form-select">
+                      <option value="Beton/Genteng Keramik">Dak Beton / Genteng Keramik / Metal</option>
+                      <option value="Genteng/Seng Baik" selected>Genteng Tanah Liat / Seng Baik / Asbes</option>
+                      <option value="Rumbia/Seng Rusak">Rumbia / Ijuk / Seng Bekas Rusak</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 4: Akses Sanitasi & Air Minum (WASH) -->
+          <div class="input-card">
+            <div class="input-card-header">
+              <div class="step-badge">4</div>
+              <div>
+                <h2 class="card-heading">Sanitasi &amp; Air Bersih (WASH)</h2>
+                <p class="card-sub">Akses air minum aman dan fasilitas sanitasi jamban keluarga.</p>
+              </div>
+            </div>
+
+            <div class="card-content">
+              <div class="control-group">
+                <label for="waterSource" class="control-label">Sumber Air Minum Utama</label>
+                <div class="custom-select-box">
+                  <select id="waterSource" name="waterSource" class="form-select">
+                    <option value="Kemasan/Bermerk">Air Kemasan Galon Bermerk / Filter Khusus</option>
+                    <option value="PDAM/Sumur Bor" selected>Ledeng PDAM / Sumur Bor Terlindung / Depot Isi Ulang
+                    </option>
+                    <option value="Sumur Gali/Mata Air">Sumur Gali Terbuka / Mata Air Alam</option>
+                    <option value="Sungai/Air Hujan">Sungai / Danau / Air Hujan Tak Terlindung</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="control-group">
+                <label for="sanitationFacility" class="control-label">Fasilitas Tempat Buang Air Besar (BAB)</label>
+                <div class="custom-select-box">
+                  <select id="sanitationFacility" name="sanitationFacility" class="form-select">
+                    <option value="Septic Tank Sendiri" selected>Jamban Sendiri (Kloset Leher Angsa + Tangki Septik)
+                    </option>
+                    <option value="Cubluk/Bersama">Jamban Bersama / Cubluk / Plengsengan Tanpa Septik</option>
+                    <option value="Tanpa Jamban">Tidak Ada Fasilitas / Jamban Terbuka / Sungai / Kebun</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 5: Kapasitas Daya Listrik, Aset & Tabungan -->
+          <div class="input-card">
+            <div class="input-card-header">
+              <div class="step-badge">5</div>
+              <div>
+                <h2 class="card-heading">Daya Listrik, Aset &amp; Barang Berharga</h2>
+                <p class="card-sub">Kapasitas listrik PLN, aset produktif/ternak, dan simpanan.</p>
+              </div>
+            </div>
+
+            <div class="card-content">
+
+              <div class="control-group">
+                <label for="electricityPower" class="control-label">Kapasitas Daya Listrik PLN Rumah Tinggal</label>
+                <div class="custom-select-box">
+                  <select id="electricityPower" name="electricityPower" class="form-select">
+                    <option value="450">450 VA (Tarif Bersubsidi Pemerintah)</option>
+                    <option value="900">900 VA (Subsidi / Non-Subsidi)</option>
+                    <option value="1300" selected>1.300 VA (Standar Mandiri)</option>
+                    <option value="2200">2.200 VA (Menengah Atas)</option>
+                    <option value="3500+">3.500 VA ke atas (Mapan / Daya Besar)</option>
+                  </select>
                 </div>
               </div>
 
@@ -279,13 +384,18 @@
                 <label for="carAvgValue" class="control-label">Taksiran Nilai Rata-rata per Mobil</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input type="number" id="carAvgValue" name="carAvgValue" class="form-text-input currency-input" min="0" step="5000000" value="0">
+                  <input type="number" id="carAvgValue" name="carAvgValue" class="form-text-input currency-input"
+                    min="0" step="5000000" value="0">
                 </div>
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="100000000">100 Jt</button>
-                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="200000000">200 Jt</button>
-                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="500000000">500 Jt</button>
-                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="1000000000">1 M</button>
+                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="100000000">100
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="200000000">200
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="500000000">500
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="carAvgValue" data-value="1000000000">1
+                    M</button>
                 </div>
                 <div class="live-counter-display" id="preview-carAvgValue">Rp 0</div>
               </div>
@@ -294,28 +404,25 @@
                 <label for="motorAvgValue" class="control-label">Taksiran Nilai Rata-rata per Motor</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input type="number" id="motorAvgValue" name="motorAvgValue" class="form-text-input currency-input" min="0" step="500000" value="0">
+                  <input type="number" id="motorAvgValue" name="motorAvgValue" class="form-text-input currency-input"
+                    min="0" step="500000" value="0">
                 </div>
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="8000000">8 Jt</button>
-                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="10000000">10 Jt</button>
-                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="15000000">15 Jt</button>
-                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="20000000">20 Jt</button>
-                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="35000000">35 Jt+</button>
+                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="8000000">8
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="10000000">10
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="15000000">15
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="20000000">20
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="motorAvgValue" data-value="35000000">35
+                    Jt+</button>
                 </div>
                 <div class="live-counter-display" id="preview-motorAvgValue">Rp 0</div>
               </div>
 
-              <div class="control-group">
-                <label for="otherVehicleValue" class="control-label">Kendaraan Lain (Truk, Niaga, Sepeda)</label>
-                <div class="currency-input-wrap">
-                  <span class="currency-label">Rp</span>
-                  <input type="number" id="otherVehicleValue" name="otherVehicleValue" class="form-text-input currency-input" min="0" value="0">
-                </div>
-                <div class="live-counter-display" id="preview-otherVehicleValue">Rp 0</div>
-              </div>
-
-              <div class="category-divider">Gadget &amp; Simpanan</div>
+              <div class="category-divider">Gadget, Lahan Produktif &amp; Ternak</div>
               <div class="grid-two-col">
                 <div class="control-group">
                   <label for="phoneCount" class="control-label">Smartphone / Tablet</label>
@@ -342,14 +449,20 @@
                 <label for="phoneAvgValue" class="control-label">Taksiran Nilai per Smartphone</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input type="number" id="phoneAvgValue" name="phoneAvgValue" class="form-text-input currency-input" min="0" step="500000" value="0">
+                  <input type="number" id="phoneAvgValue" name="phoneAvgValue" class="form-text-input currency-input"
+                    min="0" step="500000" value="0">
                 </div>
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="2000000">2 Jt</button>
-                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="4000000">4 Jt</button>
-                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="8000000">8 Jt</button>
-                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="15000000">15 Jt</button>
-                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="25000000">25 Jt+</button>
+                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="2000000">2
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="4000000">4
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="8000000">8
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="15000000">15
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="phoneAvgValue" data-value="25000000">25
+                    Jt+</button>
                 </div>
                 <div class="live-counter-display" id="preview-phoneAvgValue">Rp 0</div>
               </div>
@@ -358,28 +471,70 @@
                 <label for="laptopAvgValue" class="control-label">Taksiran Nilai per Laptop/PC</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input type="number" id="laptopAvgValue" name="laptopAvgValue" class="form-text-input currency-input" min="0" step="1000000" value="0">
+                  <input type="number" id="laptopAvgValue" name="laptopAvgValue" class="form-text-input currency-input"
+                    min="0" step="1000000" value="0">
                 </div>
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="5000000">5 Jt</button>
-                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="10000000">10 Jt</button>
-                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="18000000">18 Jt</button>
-                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="30000000">30 Jt+</button>
+                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="5000000">5
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="10000000">10
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="18000000">18
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="laptopAvgValue" data-value="30000000">30
+                    Jt+</button>
                 </div>
                 <div class="live-counter-display" id="preview-laptopAvgValue">Rp 0</div>
               </div>
 
+              <div class="grid-two-col">
+                <div class="control-group">
+                  <label for="landSizeM2" class="control-label">Luas Tanah / Lahan Produktif</label>
+                  <div class="unit-input-wrap">
+                    <input type="number" id="landSizeM2" name="landSizeM2" class="form-text-input" min="0" value="0">
+                    <span class="unit-text">m²</span>
+                  </div>
+                  <span class="control-hint">Kebun, sawah, tambak, kavling.</span>
+                </div>
+
+                <div class="control-group">
+                  <label for="livestockValue" class="control-label">Estimasi Nilai Hewan Ternak</label>
+                  <div class="currency-input-wrap">
+                    <span class="currency-label">Rp</span>
+                    <input type="number" id="livestockValue" name="livestockValue"
+                      class="form-text-input currency-input" min="0" step="1000000" value="0">
+                  </div>
+                  <span class="control-hint">Sapi, kambing, domba, unggas.</span>
+                </div>
+              </div>
+              <div class="quick-chips">
+                <button type="button" class="preset-chip" data-input="livestockValue" data-value="5000000">5 Jt</button>
+                <button type="button" class="preset-chip" data-input="livestockValue" data-value="15000000">15
+                  Jt</button>
+                <button type="button" class="preset-chip" data-input="livestockValue" data-value="30000000">30
+                  Jt</button>
+                <button type="button" class="preset-chip" data-input="livestockValue" data-value="50000000">50
+                  Jt+</button>
+              </div>
+              <div class="live-counter-display" id="preview-livestockValue">Rp 0</div>
+
               <div class="control-group">
-                <label for="otherElectronicsValue" class="control-label">Elektronik Rumah Tangga (AC, TV, Kulkas)</label>
+                <label for="otherElectronicsValue" class="control-label">Elektronik Rumah Tangga (AC, TV,
+                  Kulkas)</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input type="number" id="otherElectronicsValue" name="otherElectronicsValue" class="form-text-input currency-input" min="0" value="0">
+                  <input type="number" id="otherElectronicsValue" name="otherElectronicsValue"
+                    class="form-text-input currency-input" min="0" value="0">
                 </div>
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="5000000">5 Jt</button>
-                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="10000000">10 Jt</button>
-                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="25000000">25 Jt</button>
-                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="50000000">50 Jt+</button>
+                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="5000000">5
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="10000000">10
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="25000000">25
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="otherElectronicsValue" data-value="50000000">50
+                    Jt+</button>
                 </div>
                 <div class="live-counter-display" id="preview-otherElectronicsValue">Rp 0</div>
               </div>
@@ -388,13 +543,18 @@
                 <label for="goldSavingsValue" class="control-label">Total Emas, Deposito &amp; Tabungan</label>
                 <div class="currency-input-wrap">
                   <span class="currency-label">Rp</span>
-                  <input type="number" id="goldSavingsValue" name="goldSavingsValue" class="form-text-input currency-input" min="0" step="1000000" value="0">
+                  <input type="number" id="goldSavingsValue" name="goldSavingsValue"
+                    class="form-text-input currency-input" min="0" step="1000000" value="0">
                 </div>
                 <div class="quick-chips">
-                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="5000000">5 Jt</button>
-                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="20000000">20 Jt</button>
-                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="50000000">50 Jt</button>
-                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="100000000">100 Jt+</button>
+                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="5000000">5
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="20000000">20
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="50000000">50
+                    Jt</button>
+                  <button type="button" class="preset-chip" data-input="goldSavingsValue" data-value="100000000">100
+                    Jt+</button>
                 </div>
                 <div class="live-counter-display" id="preview-goldSavingsValue">Rp 0</div>
               </div>
@@ -403,7 +563,7 @@
 
           <div class="action-dock">
             <button type="submit" id="btn-submit" class="cta-calc-btn">
-              Hitung Posisi Desil Saya ☝️🤓
+              Hitung Posisi Desil ☝️🤓
             </button>
           </div>
         </form>
@@ -414,7 +574,7 @@
            =================================================================== -->
       <section id="view-results" class="view-panel hidden" aria-label="Hasil Analisis Desil">
         <div class="results-container-card">
-          
+
           <!-- Result Header -->
           <div class="result-headline-section">
             <div class="result-top-badge" id="res-percentile-label">Persentil ~95%</div>
@@ -427,10 +587,10 @@
           <!-- Interactive Population Distribution Spectrum (SVG Curve) -->
           <div class="distribution-spectrum-card">
             <div class="spectrum-header">
-              <span class="spectrum-title">Posisi pada Kurva Distribusi Penduduk Indonesia</span>
-              <span class="spectrum-meta">Model Lognormal Susenas BPS (280 Juta Jiwa)</span>
+              <span class="spectrum-title">Posisi pada Kurva Distribusi Standar Bank Dunia</span>
+              <span class="spectrum-meta">Model Aspiring Indonesia &amp; World Bank PIP (PPP 2021)</span>
             </div>
-            
+
             <div class="svg-chart-container">
               <svg viewBox="0 0 500 120" class="bell-curve-svg" preserveAspectRatio="none">
                 <defs>
@@ -442,15 +602,19 @@
                   </linearGradient>
                 </defs>
                 <!-- Distribution Smooth Area -->
-                <path d="M 0 115 Q 100 115, 180 85 T 260 25 T 340 75 T 420 105 T 500 115 L 500 115 L 0 115 Z" class="curve-area" />
+                <path d="M 0 115 Q 100 115, 180 85 T 260 25 T 340 75 T 420 105 T 500 115 L 500 115 L 0 115 Z"
+                  class="curve-area" />
                 <path d="M 0 115 Q 100 115, 180 85 T 260 25 T 340 75 T 420 105 T 500 115" class="curve-stroke" />
-                
+
                 <!-- Baseline Anchors -->
-                <line x1="70" y1="20" x2="70" y2="115" class="anchor-line" />
-                <text x="72" y="32" class="anchor-label">Garis Kemiskinan (Rp 641rb)</text>
-                
-                <line x1="260" y1="15" x2="260" y2="115" class="anchor-line" />
-                <text x="262" y="25" class="anchor-label">Median (Rp 1.01jt)</text>
+                <line x1="60" y1="20" x2="60" y2="115" class="anchor-line" />
+                <text x="62" y="32" class="anchor-label">Garis Kemiskinan (Rp 641rb)</text>
+
+                <line x1="190" y1="15" x2="190" y2="115" class="anchor-line" />
+                <text x="192" y="25" class="anchor-label">UMIC Line $6.85 (Rp 1.13jt)</text>
+
+                <line x1="340" y1="15" x2="340" y2="115" class="anchor-line" />
+                <text x="342" y="25" class="anchor-label">Kelas Menengah (Rp 2.25jt)</text>
 
                 <!-- Dynamic User Pin Marker -->
                 <g id="svg-user-pin" transform="translate(460, 0)">
@@ -484,7 +648,7 @@
               <div class="metric-cell">
                 <span class="m-label">Kapasitas Per Orang</span>
                 <strong class="m-value" id="res-per-capita">Rp 0</strong>
-                <span class="m-sub">per anggota keluarga / bulan</span>
+                <span class="m-sub">per anggota keluarga / bulan (dikonversi ke USD PPP Bank Dunia)</span>
               </div>
               <div class="metric-cell">
                 <span class="m-label">Total Penghasilan RT</span>
@@ -494,7 +658,35 @@
               <div class="metric-cell full-span">
                 <span class="m-label">Aset Index Terpisah</span>
                 <strong class="m-value highlight" id="res-asset-total">Rp 0</strong>
-                <span class="m-sub">Nilai pembobotan aset fisik (tidak mendistorsi desil pengeluaran rutin)</span>
+                <span class="m-sub">Nilai pembobotan aset fisik &amp; ternak (tidak mendistorsi desil pengeluaran
+                  rutin)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Multidimensional Indicators Card (MPI World Bank) -->
+          <div class="mpi-evaluation-card">
+            <h3 class="metrics-heading">Evaluasi Kesejahteraan Multidimensi (MPI)</h3>
+            <div class="mpi-grid">
+              <div class="mpi-cell">
+                <span class="mpi-label">Kelayakan Hunian</span>
+                <strong class="mpi-value" id="res-mpi-housing">Layak Huni</strong>
+                <span class="mpi-sub" id="res-mpi-housing-sub">Lantai Keramik, Tembok Bata</span>
+              </div>
+              <div class="mpi-cell">
+                <span class="mpi-label">Sanitasi &amp; Air Bersih</span>
+                <strong class="mpi-value" id="res-mpi-wash">Sanitasi Layak</strong>
+                <span class="mpi-sub" id="res-mpi-wash-sub">Septic Tank + PDAM</span>
+              </div>
+              <div class="mpi-cell">
+                <span class="mpi-label">Modal Manusia</span>
+                <strong class="mpi-value" id="res-mpi-education">Pendidikan Menengah</strong>
+                <span class="mpi-sub" id="res-mpi-education-sub">SMA / SMK Sederajat</span>
+              </div>
+              <div class="mpi-cell">
+                <span class="mpi-label">Beban Kerentanan Kesehatan</span>
+                <strong class="mpi-value" id="res-mpi-health">Beban Normal</strong>
+                <span class="mpi-sub" id="res-mpi-health-sub">Tidak ada penyakit kronis</span>
               </div>
             </div>
           </div>
@@ -511,7 +703,9 @@
           <div class="safe-disclaimer-card">
             <strong class="disclaimer-title">📌 Penafian &amp; Batasan Model (Disclaimer):</strong>
             <p class="disclaimer-text">
-              Hasil ini adalah <strong>estimasi statistik mandiri</strong> yang dihitung dari model kurva distribusi per kapita (Susenas BPS). Aplikasi ini tidak berafiliasi dengan kementerian atau lembaga pemerintah mana pun, dan tidak memengaruhi penentuan resmi program bantuan sosial atau subsidi.
+              Hasil ini adalah <strong>estimasi simulasi mandiri</strong> yang dihitung dari model standar Bank Dunia
+              (World Bank <em>Aspiring Indonesia</em> &amp; Poverty and Inequality Platform / PIP). Aplikasi ini tidak
+              berafiliasi dengan lembaga pemerintah mana pun dan ditujukan murni untuk literasi ekonomi publik.
             </p>
           </div>
 
@@ -521,12 +715,16 @@
               <span class="feedback-tag">Diskusi &amp; Masukan</span>
               <h4 class="feedback-title">Punya saran metodologi atau temuan anomali data?</h4>
               <p class="feedback-desc">
-                Proyek ini bersifat terbuka (<em>open source</em>). Kamu dapat memberikan masukan, kritik formula, atau berdiskusi langsung di repositori GitHub kami.
+                Proyek ini bersifat terbuka (<em>open source</em>). Kamu dapat memberikan masukan, kritik formula, atau
+                berdiskusi langsung di repositori GitHub kami.
               </p>
             </div>
-            <a href="https://github.com/helggaa/Aku-Desil-10/issues/new" target="_blank" rel="noopener noreferrer" class="btn-github-feedback">
+            <a href="https://github.com/helggaa/Aku-Desil-10/issues/new" target="_blank" rel="noopener noreferrer"
+              class="btn-github-feedback">
               <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" aria-hidden="true">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                <path
+                  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                </path>
               </svg>
               Beri Masukan di GitHub Issues
             </a>
@@ -551,28 +749,35 @@
       <div class="privacy-modal-container">
         <div class="privacy-modal-header">
           <h3 class="privacy-modal-title">Privacy and Policy</h3>
-          <button type="button" id="btn-close-privacy" class="modal-close-button" aria-label="Tutup dialog">&times;</button>
+          <button type="button" id="btn-close-privacy" class="modal-close-button"
+            aria-label="Tutup dialog">&times;</button>
         </div>
         <div class="privacy-modal-body">
           <p>
-            <strong>Aku Desil 10</strong> dirancang dengan prinsip privasi mutlak berbasis ketiadaan arsitektur transmisi data (*privacy by absence*).
+            <strong>Aku Desil 10</strong> dirancang dengan prinsip privasi mutlak berbasis ketiadaan arsitektur
+            transmisi data (*privacy by absence*).
           </p>
           <div class="privacy-terms-list">
             <div class="privacy-term-item">
               <strong>1. Tanpa Pengumpulan Data (Zero Data Collection)</strong>
-              <p>Seluruh angka pengeluaran, gaji, dan aset yang kamu masukkan diproses 100% di memori sementara (RAM) perambanmu. Tidak ada data yang dikirim ke server backend atau pihak ketiga.</p>
+              <p>Seluruh angka pengeluaran, gaji, dan aset yang kamu masukkan diproses 100% di memori sementara (RAM)
+                perambanmu. Tidak ada data yang dikirim ke server backend atau pihak ketiga.</p>
             </div>
             <div class="privacy-term-item">
               <strong>2. Tanpa Pelacak &amp; Cookies (Zero Trackers)</strong>
-              <p>Aplikasi ini tidak menggunakan Google Analytics, Meta Pixel, cookies, <code>localStorage</code>, maupun <code>sessionStorage</code>.</p>
+              <p>Aplikasi ini tidak menggunakan Google Analytics, Meta Pixel, cookies, <code>localStorage</code>, maupun
+                <code>sessionStorage</code>.
+              </p>
             </div>
             <div class="privacy-term-item">
               <strong>3. Tanpa Identitas Pribadi (Zero PII)</strong>
-              <p>Kami tidak meminta maupun menyimpan identitas pribadi apa pun seperti Nama Lengkap, Nomor Induk Kependudukan (NIK), alamat surel, atau nomor telepon.</p>
+              <p>Kami tidak meminta maupun menyimpan identitas pribadi apa pun seperti Nama Lengkap, Nomor Induk
+                Kependudukan (NIK), alamat surel, atau nomor telepon.</p>
             </div>
             <div class="privacy-term-item">
               <strong>4. Batasan &amp; Independensi</strong>
-              <p>Aplikasi ini merupakan simulasi independen untuk tujuan edukasi dan literasi data publik, tidak berafiliasi dengan instansi pemerintah (Kemensos/BPS/DTSEN).</p>
+              <p>Aplikasi ini merupakan simulasi independen untuk tujuan edukasi dan literasi data publik, tidak
+                berafiliasi dengan instansi pemerintah (Kemensos/BPS/DTSEN).</p>
             </div>
           </div>
         </div>
@@ -596,4 +801,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
